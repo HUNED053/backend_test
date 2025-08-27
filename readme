@@ -1,0 +1,160 @@
+# 🎯 Backend Developer Test – FastAPI
+
+This project implements the **Backend Developer Test** using **FastAPI + PostgreSQL + Alembic + Redis**.  
+It demonstrates authentication, role-based access, database modeling, CRUD APIs, caching, and background jobs.
+
+---
+
+## 🚀 Features
+- ✅ JWT-based user authentication  
+- ✅ Role-based access (Admin, Student, Teacher)  
+- ✅ PostgreSQL with SQLAlchemy ORM + Alembic migrations  
+- ✅ CRUD APIs for Students & Teachers  
+- ✅ Student ↔ Teacher enrollments (many-to-many)  
+- ✅ Redis caching for student list (30 seconds)  
+- ✅ Background task to simulate email on new enrollment  
+- ✅ Environment-based configuration with `.env`  
+
+---
+
+## 🛠 Setup Instructions
+
+### 1. Clone Repo
+```bash
+git clone https://github.com/<your-username>/backend-test-fastapi.git
+cd backend-test-fastapi
+2. Create Virtual Environment
+bash
+Copy
+Edit
+python -m venv venv
+source venv/bin/activate   # macOS/Linux
+venv\Scripts\activate      # Windows
+3. Install Dependencies
+bash
+Copy
+Edit
+pip install -r requirements.txt
+4. Configure Environment
+Copy .env.example → .env
+
+Update values (DB URL, secret key, etc.)
+
+5. Setup Database
+Run Alembic migrations:
+
+bash
+Copy
+Edit
+alembic upgrade head
+6. Start Redis
+bash
+Copy
+Edit
+# Linux/Mac
+redis-server
+
+# Windows (Docker)
+docker run -d -p 6379:6379 redis
+7. Run App
+bash
+Copy
+Edit
+uvicorn app.main:app --reload
+App runs at 👉 http://127.0.0.1:8000
+
+Swagger docs 👉 http://127.0.0.1:8000/docs
+
+📖 API Testing Guide
+🔑 Authentication
+POST /auth/register → Register new user (Admin/Student/Teacher)
+
+POST /auth/login → Login, get JWT token
+
+👉 Use the token with Swagger Authorize button (type: Bearer).
+
+👩‍🎓 Students
+POST /students/ → Create student
+
+GET /students/ → List students (cached 30s in Redis)
+
+GET /students/{id} → Get student by ID
+
+PUT /students/{id} → Update student
+
+DELETE /students/{id} → Delete student
+
+👨‍🏫 Teachers
+POST /teachers/ → Create teacher
+
+GET /teachers/ → List teachers
+
+GET /teachers/{id} → Get teacher by ID
+
+PUT /teachers/{id} → Update teacher
+
+DELETE /teachers/{id} → Delete teacher
+
+🔗 Enrollments
+POST /enrollments/ → Assign student ↔ teacher (triggers email background task)
+
+GET /enrollments/teacher/{id} → List students of a teacher
+
+GET /enrollments/student/{id} → List teachers of a student
+
+⚙️ Environment Variables
+.env.example file:
+
+ini
+Copy
+Edit
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/backend_test
+SECRET_KEY=replace_me_with_a_long_random_string
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=60
+REDIS_URL=redis://localhost:6379/0
+⚠️ Do NOT upload .env to GitHub.
+Instead, only include .env.example.
+
+⚡ Redis Configuration
+Redis must be running for student list caching.
+
+Default URL: redis://localhost:6379/0
+
+On enrollment, a background task simulates sending an email (logged in console).
+
+📦 Bonus
+🔐 Secure password hashing using bcrypt
+
+🔄 Cache invalidation on student updates/deletes
+
+🐳 Can be dockerized (optional)
+
+🧹 Clean modular code structure
+
+❗ Submission Guidelines
+Push code to a public GitHub repo.
+
+Do NOT commit .env or venv/.
+
+Include:
+
+Codebase (app/, alembic/, etc.)
+
+requirements.txt
+
+.env.example
+
+README.md
+
+👉 Submit only the GitHub repo link to recruiters.
+
+yaml
+Copy
+Edit
+
+---
+
+✅ That’s your **final README.md**.  
+
+Do you also want me to give you the **exact `requirements.txt` content** to include alongside this,
